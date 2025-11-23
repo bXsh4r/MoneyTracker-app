@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/offWhite"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tv_totalMoney"
+        android:layout_width="350dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/text_white_background"
+        android:gravity="center"
+        android:text="0 IQD"
+        android:textColor="@color/black"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_btn"
+        android:layout_width="105dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="188dp"
+        android:backgroundTint="@color/gray"
+        android:text="Add"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sub_btn"
+        app:rippleColor="@color/white" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sub_btn"
+        android:layout_width="105dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/gray"
+        android:text="Remove"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/add_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/add_btn"
+        app:rippleColor="@color/white" />
+
+    <EditText
+        android:id="@+id/et_inputMoney"
+        android:layout_width="213dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="156dp"
+        android:background="@drawable/text_white_background"
+        android:ems="10"
+        android:hint="Enter amount of money"
+        android:inputType="number"
+        android:maxLength="9"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_totalMoney" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text=""
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_description" />
+
+    <EditText
+        android:id="@+id/et_description"
+        android:layout_width="270dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/text_white_background"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        android:maxLength="25"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_inputMoney" />
+
+    <ImageButton
+        android:id="@+id/history_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/offWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_recent_history" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

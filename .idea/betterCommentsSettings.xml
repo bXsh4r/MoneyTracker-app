@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BetterCommentsSettings">
+    <option name="initialized" value="true" />
+    <option name="tags">
+      <list>
+        <CustomTag>
+          <option name="color" value="#FF0000" />
+          <option name="type" value="!" />
+        </CustomTag>
+        <CustomTag>
+          <option name="color" value="#3498DB" />
+          <option name="type" value="?" />
+        </CustomTag>
+        <CustomTag>
+          <option name="color" value="#999999" />
+          <option name="type" value="//" />
+        </CustomTag>
+        <CustomTag>
+          <option name="color" value="#FF8C00" />
+          <option name="type" value="todo" />
+        </CustomTag>
+        <CustomTag>
+          <option name="color" value="#98C379" />
+          <option name="type" value="*" />
+        </CustomTag>
+        <CustomTag>
+          <option name="color" value="#FF6666" />
+          <option name="italic" value="true" />
+        </CustomTag>
+      </list>
+    </option>
+  </component>
+</project>
