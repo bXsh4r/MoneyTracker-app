@@ -43,8 +43,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                     deletionAlertDialog(result -> {
                         if (result) {
                             DatabaseHelper db = new DatabaseHelper(context);
-                            Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                            db.delete(historyList.get(adapterPosition).getId()); // First delete from the database
+                            Toast.makeText(context, "Removed", Toast.LENGTH_SHORT).show();
+                            db.deleteHistory(historyList.get(adapterPosition).getId()); // First delete from the database
                             historyList.remove(adapterPosition); // Then from the list
                             notifyItemRemoved(adapterPosition); // Then notify the recycler view
                             db.close();

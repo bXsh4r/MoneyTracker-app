@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="alertDialogTheme">
+        <item name="android:windowBackground">@drawable/alert_dialog_window_night</item>
+        <item name="android:textColorPrimary">@color/white</item>
+
+        <item name="android:windowIsFloating">true</item>
+
+        <item name="android:windowMinWidthMinor">350dp</item>
+    </style>
+</resources>

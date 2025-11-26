@@ -13,7 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // History table
     public static final String MONEY_HISTORY_TABLE = "MoneyHistory_table";
-    public static final String ID = "id";
+    public static final String HISTORY_ID = "id";
     public static final String OPERATION = "operation";
     public static final String AMOUNT = "amount";
     public static final String DESCRIPTION = "description";
@@ -27,7 +27,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Total amount table
     public static final String TOTAL_MONEY_TABLE = "totalMoneyAmount_table";
     public static final String TOTAL_AMOUNT = "totalAmount";
-    public static final String TOTAL_ID = "totatID";
+    public static final String TOTAL_ID = "totalID";
+
+    // Spinner Items table
+    public static final String SPINNER_ITEMS_TABLE = "spinnerItems_table";
+    public static final String ITEM_ID = "itemID";
+    public static final String ITEM_NAME = "itemName";
 
 
     public DatabaseHelper(@Nullable Context context) {
@@ -37,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable1 = "CREATE TABLE " + MONEY_HISTORY_TABLE + " (" +
-                ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                HISTORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 OPERATION + " TEXT, " +
                 AMOUNT + " TEXT, " +
                 DESCRIPTION + " TEXT, " +
@@ -47,9 +52,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         String createTable3 = "CREATE TABLE " + TOTAL_MONEY_TABLE + " (" + TOTAL_ID + " INTEGER PRIMARY KEY, " + TOTAL_AMOUNT + " TEXT)";
 
+        String createTable4 = "CREATE TABLE " + SPINNER_ITEMS_TABLE + " (" + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + ITEM_NAME + " TEXT)";
+
         db.execSQL(createTable1);
         db.execSQL(createTable2);
         db.execSQL(createTable3);
+        db.execSQL(createTable4);
     }
 
     @Override
@@ -146,10 +154,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return "0";
     }
 
+    // Gets a list of all the items in the history database
     public List<HistoryData> getHistory(){
         List<HistoryData> historyList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + MONEY_HISTORY_TABLE + " ORDER BY " + ID + " DESC";
+        String query = "SELECT * FROM " + MONEY_HISTORY_TABLE + " ORDER BY " + HISTORY_ID + " DESC";
         Cursor cursor = db.rawQuery(query, null);
 
         if(cursor.moveToFirst()){
@@ -171,10 +180,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return historyList;
     }
 
-    public void delete(int id){
+    // deletes  a history instance from the database
+    public void deleteHistory(int id){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "DELETE FROM " + MONEY_HISTORY_TABLE + " WHERE " + ID + " = " + id;
-        db.execSQL(query);
+        db.delete(MONEY_HISTORY_TABLE, HISTORY_ID +"=?", new String[]{String.valueOf(id)});
+        db.close();
+    }
+
+    // Adds an item to the spinner database
+    public boolean addToSpinner(String item){
+        long insert = -1;
+        try (SQLiteDatabase db = this.getWritableDatabase()) {
+            ContentValues cv = new ContentValues();
+
+            cv.put(ITEM_NAME, item);
+
+            insert = db.insert(SPINNER_ITEMS_TABLE, null, cv);
+        }
+        return insert != -1;
+    }
+
+    // Gets a list of all items from the spinner database
+    public List<String> getSpinnerItems(){
+        List<String> spinnerItems = new ArrayList<>();
+
+        spinnerItems.add("Description:");
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + SPINNER_ITEMS_TABLE;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst()){
+            do{
+                String item = cursor.getString(1);
+                spinnerItems.add(item);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        spinnerItems.add("Other");  // To display "Other" at the end of the spinner list
+
+        return spinnerItems;
+    }
+
+    // Deleting from spinner
+    public void deleteFromSpinner(String item){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(SPINNER_ITEMS_TABLE, ITEM_NAME+"=?", new String[]{item});
         db.close();
     }
 }

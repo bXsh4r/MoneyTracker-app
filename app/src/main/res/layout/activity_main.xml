@@ -27,7 +27,7 @@
         android:id="@+id/add_btn"
         android:layout_width="105dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="188dp"
+        android:layout_marginBottom="136dp"
         android:backgroundTint="@color/gray"
         android:text="Add"
         android:textColor="@color/black"
@@ -55,11 +55,12 @@
         android:layout_marginTop="156dp"
         android:background="@drawable/text_white_background"
         android:ems="10"
-        android:hint="Enter amount of money"
+        android:hint="Enter amount of money..."
         android:inputType="number"
         android:maxLength="9"
         android:textAlignment="center"
         android:textColor="@color/black"
+        android:textColorHint="@color/light_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_totalMoney" />
@@ -84,13 +85,16 @@
         android:background="@drawable/text_white_background"
         android:ems="10"
         android:gravity="center"
-        android:hint="Description"
+        android:hint="Description..."
         android:inputType="textMultiLine"
         android:maxLength="25"
         android:textColor="@color/black"
+        android:textColorHint="@color/light_gray"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_inputMoney" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <ImageButton
         android:id="@+id/history_btn"
@@ -102,6 +106,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_recent_history" />
+
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="35sp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/addToSpinner_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_inputMoney" />
+
+    <ImageButton
+        android:id="@+id/addToSpinner_btn"
+        android:layout_width="45dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="2dp"
+        android:backgroundTint="@color/offWhite"
+        android:scaleType="fitCenter"
+        android:src="@drawable/add_sign"
+        app:layout_constraintEnd_toStartOf="@+id/removeFromSpinner_btn"
+        app:layout_constraintTop_toTopOf="@+id/spinner" />
+
+    <ImageButton
+        android:id="@+id/removeFromSpinner_btn"
+        android:layout_width="47dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="70dp"
+        android:backgroundTint="@color/offWhite"
+        android:scaleType="fitCenter"
+        android:src="@drawable/trash_bin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinner" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
