@@ -2,6 +2,7 @@ package com.example.moneytracker;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
@@ -27,8 +28,7 @@ import java.util.function.Consumer;
 
 /* TODO:
     search history
-    orientation problem
-    upgrade database
+    fix stuff
  */
 
 
@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Locks the screen on portrait mode
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         if(db.isUserNew()){ // Checks if the user is new
             Intent NewActivityIntent = new Intent(MainActivity.this, NewUser.class);
@@ -252,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // To get date and time
     private String getDateAndTime() {
         LocalDateTime dateTime = LocalDateTime.now();
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("hh:mm a");
         return dateTime.format(formatterDate) + " at " + dateTime.format(formatterTime);
     }

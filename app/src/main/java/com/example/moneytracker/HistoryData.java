@@ -18,6 +18,7 @@ public class HistoryData {
     public int getId(){
         return id;
     }
+
     public String getOperation() {
         return operation;
     }

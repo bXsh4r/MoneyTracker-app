@@ -66,6 +66,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView tv_description;
         TextView tv_date;
         ConstraintLayout layout_history;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_opAndAmount = itemView.findViewById(R.id.tv_opAndAmount);
@@ -73,8 +74,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             tv_date = itemView.findViewById(R.id.tv_date);
             layout_history = itemView.findViewById(R.id.layout_history);
         }
-
-
     }
 
     // Creates an AlertDialog for deletion confirmation
