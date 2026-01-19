@@ -1,9 +1,15 @@
 package com.example.moneytracker;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -53,6 +59,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 }
             }
         });
+
+        holder.editHistoryDesc_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int adapterPosition = holder.getBindingAdapterPosition();
+                if(adapterPosition != RecyclerView.NO_POSITION){
+                    // gets the id and pass it the method with the adapter position
+                    editDescAlertDialog(historyList.get(adapterPosition).getId(), adapterPosition, result -> {
+                        if(result){
+                            notifyItemChanged(adapterPosition);
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
@@ -66,6 +87,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView tv_description;
         TextView tv_date;
         ConstraintLayout layout_history;
+        ImageButton editHistoryDesc_btn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,6 +95,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_date = itemView.findViewById(R.id.tv_date);
             layout_history = itemView.findViewById(R.id.layout_history);
+            editHistoryDesc_btn = itemView.findViewById(R.id.editHistoryDesc_btn);
         }
     }
 
@@ -84,5 +107,49 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 .setPositiveButton("Yes", (dialog, which) -> callback.accept(true))
                 .setNegativeButton("No", (dialog, which) -> callback.accept(false))
                 .show();
+    }
+
+    // Updating description from the database
+    private void editDescAlertDialog(int id, int adapterPosition, Consumer<Boolean> callback) {
+        DatabaseHelper db = new DatabaseHelper(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Edit Description");
+        builder.setMessage("Enter new description:");
+
+        EditText input = new EditText(context);
+        input.setHint("Description...");
+        input.setTextColor(Color.WHITE);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(35)
+        });
+
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            String inputText = input.getText().toString().trim();
+
+            if (inputText.isEmpty()) {
+                Toast.makeText(context, "Nothing added", Toast.LENGTH_SHORT).show();
+                callback.accept(false);
+            } else {
+                if (db.updateHistoryDesc(id, inputText)) { // if updated
+                    Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show();
+                    historyList.get(adapterPosition).setDescription(inputText); // update the list as well
+                    callback.accept(true);
+                } else {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                    callback.accept(false);
+                }
+
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.cancel();
+            callback.accept(false);
+        });
+
+        builder.show();
     }
 }

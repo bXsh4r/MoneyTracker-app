@@ -90,7 +90,7 @@ public class NewUser extends AppCompatActivity {
     // Gets the date and time of when it's called
     private String getDateAndTime() {
         LocalDateTime dateTime = LocalDateTime.now();
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("hh:mm a");
         return dateTime.format(formatterDate) + " at " + dateTime.format(formatterTime);
     }

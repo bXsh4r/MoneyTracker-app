@@ -5,7 +5,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.ContextThemeWrapper;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ import java.util.function.Consumer;
 /* TODO:
     search history
     fix stuff
+    add notes
  */
 
 
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Locks the screen on portrait mode
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        if(db.isUserNew()){ // Checks if the user is new
+        if (db.isUserNew()) { // Checks if the user is new
             Intent NewActivityIntent = new Intent(MainActivity.this, NewUser.class);
             startActivity(NewActivityIntent);
         }
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-                                                                                                                                                    
+
         // Initializing variables
         tv_totalMoney = findViewById(R.id.tv_totalMoney);
         et_inputMoney = findViewById(R.id.et_inputMoney);
@@ -107,13 +109,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner.setAdapter(spinnerAdapter);
 
 
-
         String totalMoney = db.getTotalAmount(); // Gets the total amount in the database
-        totalMoney = (totalMoney==null) ? "0" : totalMoney; // Makes sure that no null value is assigned
+        totalMoney = (totalMoney == null) ? "0" : totalMoney; // Makes sure that no null value is assigned
 
         tv_totalMoney.setText(totalMoney + " IQD"); // Sets the totalMoney TextView to the value from the database
         handleMoney.setTotalMoney(totalMoney); // Sets the totalMoneyStr variable in the
-                                               // MoneyHandling class to the value of the total money
+        // MoneyHandling class to the value of the total money
 
 
         add_btn.setOnClickListener(new View.OnClickListener() {
@@ -208,13 +209,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
 
         removeFromSpinner_btn.setOnClickListener(new View.OnClickListener() {
-
-
             @Override
             public void onClick(View v) {
                 String itemSelected = spinner.getItemAtPosition(spinner.getSelectedItemPosition()).toString();
                 spinnerRemoveAlertDialog(result -> {
-                    if(result){
+                    if (result) {
                         db.deleteFromSpinner(itemSelected);
                         Toast.makeText(MainActivity.this, "Removed " + itemSelected, Toast.LENGTH_SHORT).show();
                         // Resets the spinner adapter by making and setting a new one
@@ -288,6 +287,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         EditText input = new EditText(this);
         input.setHint("Description...");
         input.setTextColor(Color.WHITE);
+        input.setInputType(InputType.TYPE_CLASS_TEXT); // Specifies the input type
+        input.setFilters(new InputFilter[] {
+                new InputFilter.LengthFilter(15) // Sets filters to limit the length of the input text
+        });
 
         builder.setView(input);
 
@@ -313,7 +316,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     );
                     spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner.setAdapter(spinnerAdapter);
-
                 }else{
                     Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }

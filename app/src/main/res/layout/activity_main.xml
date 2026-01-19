@@ -75,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_description" />
+        app:layout_constraintTop_toTopOf="@+id/et_description" />
 
     <EditText
         android:id="@+id/et_description"
@@ -86,8 +86,8 @@
         android:ems="10"
         android:gravity="center"
         android:hint="Description..."
-        android:inputType="textMultiLine"
-        android:maxLength="25"
+        android:inputType="text"
+        android:maxLength="35"
         android:textColor="@color/black"
         android:textColorHint="@color/light_gray"
         android:visibility="invisible"

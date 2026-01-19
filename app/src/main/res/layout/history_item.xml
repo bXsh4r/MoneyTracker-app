@@ -39,12 +39,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="8dp"
         android:text="TextView"
         android:textAlignment="textStart"
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_opAndAmount" />
 
@@ -60,4 +60,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+    <ImageButton
+        android:id="@+id/editHistoryDesc_btn"
+        android:layout_width="39dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="-8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/offWhite"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_description"
+        app:srcCompat="@drawable/edit_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

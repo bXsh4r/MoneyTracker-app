@@ -76,8 +76,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(checkQuery, null);
 
         if(cursor.moveToFirst()){
-            newUser = cursor.getInt(0); // Note that the (columnIndex) is not the
-                                                // index in the db but the index in the cursor that is determined by (getTotal)
+            newUser = cursor.getInt(0); // Note that the (columnIndex) is not the index in the db
+                                                // but the index in the cursor that is determined by (getTotal)
         }
 
         cursor.close();
@@ -180,11 +180,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return historyList;
     }
 
-    // deletes  a history instance from the database
+    // deletes a history instance from the database
     public void deleteHistory(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(MONEY_HISTORY_TABLE, HISTORY_ID +"=?", new String[]{String.valueOf(id)});
         db.close();
+    }
+
+    // Updates the description of a history row
+    public boolean updateHistoryDesc(int id, String newDesc){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(DESCRIPTION, newDesc);
+        int rowsUpdated = db.update(MONEY_HISTORY_TABLE, cv, HISTORY_ID + "=?", new String[]{String.valueOf(id)});
+
+        db.close();
+
+        return rowsUpdated > 0;
     }
 
     // Adds an item to the spinner database

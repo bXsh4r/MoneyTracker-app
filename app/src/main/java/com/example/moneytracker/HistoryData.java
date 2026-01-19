@@ -34,4 +34,7 @@ public class HistoryData {
     public String getDate() {
         return date;
     }
+    public void setDescription(String newDesc){
+        this.description = newDesc;
+    }
 }
