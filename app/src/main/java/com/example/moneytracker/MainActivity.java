@@ -28,9 +28,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 /* TODO:
-    search history
     fix stuff
-    add notes
+    maybe add some UI features in activity_history
  */
 
 
@@ -132,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             if (newTextViewText.contains("true")) { // Checks if the returned value has "true" indicating a big number, if yes then it displays a warning
                                 warningAlertDialog("That's too much money! Nothing was added to your history");
                                 et_inputMoney.setText("");
-                                et_description.setText("");
+                                spinner.setSelection(0); // Goes back to the first item
                             } else {
                                 insertToHistory("Added", getAmountOfMoney(), getDescriptionText(), getDateAndTime());  // calls the method that inserts a new row in the database
                                 db.updateTotalAmount(newTextViewText);  // Updates the totalAmount in the database
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             if (newTextViewText.contains("true")) { // Checks if the returned value has "true" indicating a negative number, if yes it displays a warning
                                 warningAlertDialog("Can't have negative money! Nothing was added to your history");
                                 et_inputMoney.setText("");
-                                et_description.setText("");
+                                spinner.setSelection(0); // Goes back to the first item
                             } else {
                                 insertToHistory("Removed", getAmountOfMoney(), getDescriptionText(), getDateAndTime());
                                 db.updateTotalAmount(newTextViewText);

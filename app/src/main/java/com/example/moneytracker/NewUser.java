@@ -66,7 +66,7 @@ public class NewUser extends AppCompatActivity {
                         if (result) {
 
                             // Inserts input value to the database and returns a boolean indicating a success or a failure
-                            boolean isSuccess = db.insertToDataBase("Added", getTotalMoney(), "This was your total " +
+                            boolean isSuccess = db.insertToDataBase("Added", getTotalMoney(), "Your total " +
                                     "money when you first used the app", getDateAndTime());
                             if (isSuccess) {
                                 Toast.makeText(NewUser.this, "Added to history", Toast.LENGTH_SHORT).show();
