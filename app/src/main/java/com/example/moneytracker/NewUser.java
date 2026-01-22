@@ -28,10 +28,12 @@ public class NewUser extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
+
+        db = new DatabaseHelper(NewUser.this);
+
         // Locks the screen on portrait mode
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        super.onCreate(savedInstanceState);
 
         // Prevents the back button from going back to the previous intent
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {

@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         db = new DatabaseHelper(MainActivity.this);
 
@@ -63,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Intent NewActivityIntent = new Intent(MainActivity.this, NewUser.class);
             startActivity(NewActivityIntent);
         }
-
-        super.onCreate(savedInstanceState);
 
         // Prevents the back button from going back to the previous intent
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
