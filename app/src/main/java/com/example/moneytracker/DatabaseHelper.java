@@ -144,8 +144,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(getTotal, null);
 
         if(cursor.moveToFirst()){
-            return cursor.getString(0); // Note that the (columnIndex) is not the
+            String totalAmount = cursor.getString(0); // Note that the (columnIndex) is not the
                                                    // index in the db but the index in the cursor that is determined by (getTotal)
+            cursor.close();
+            db.close();
+
+            return totalAmount;
         }
 
         cursor.close();

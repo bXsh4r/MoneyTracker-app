@@ -23,7 +23,8 @@ public class HistoryActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SearchView searchView;
-    private DatabaseHelper db = new DatabaseHelper(this);
+
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class HistoryActivity extends AppCompatActivity {
             return insets;
         });
 
-        DatabaseHelper db = new DatabaseHelper(HistoryActivity.this); // DatabaseHelper class to use the getHistory method
+        db = new DatabaseHelper(HistoryActivity.this); // DatabaseHelper class to use the getHistory method
 
         // Search View
         searchView = findViewById(R.id.sc_historySearchView);
@@ -85,5 +86,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         mAdapter = new MyAdapter(filteredList, HistoryActivity.this); // update the recycler view with filteredList items
         recyclerView.setAdapter(mAdapter);
+        db.close();
     }
 }

@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 
 public class NewUser extends AppCompatActivity {
 
-    DatabaseHelper db = new DatabaseHelper(NewUser.this);
+    private DatabaseHelper db;
 
     EditText et_getTotalMoney;
     Button ok_btn;
@@ -85,6 +85,7 @@ public class NewUser extends AppCompatActivity {
                 }
             }
         });
+        db.close();
     }
 
     // Gets the date and time of when it's called

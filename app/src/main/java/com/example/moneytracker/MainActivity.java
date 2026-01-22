@@ -34,8 +34,8 @@ import java.util.function.Consumer;
 
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-    MoneyHandling handleMoney = new MoneyHandling();  // Object of MoneyHandling class
-    DatabaseHelper db = new DatabaseHelper(MainActivity.this); // Object of DataBaseHelper class
+    private MoneyHandling handleMoney = new MoneyHandling();  // Object of MoneyHandling class
+    private DatabaseHelper db; // Object of DataBaseHelper class
 
 
     TextView tv_totalMoney;
@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        db = new DatabaseHelper(MainActivity.this);
 
         // Locks the screen on portrait mode
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -227,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 });
             }
         });
+        db.close();
     }
 
     // Gets the input typed in the money EditView
@@ -327,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
         builder.show();
+        db.close();
     }
 
     // AlertDialog to remove a spinner item
@@ -352,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }else{
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
+        db.close();
     }
 
     @Override
