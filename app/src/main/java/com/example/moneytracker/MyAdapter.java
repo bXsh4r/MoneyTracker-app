@@ -1,7 +1,6 @@
 package com.example.moneytracker;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.InputFilter;
 import android.text.InputType;

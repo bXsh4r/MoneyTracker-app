@@ -28,8 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.function.Consumer;
 
 /* TODO:
-    fix stuff
-    maybe add some UI features in activity_history
+
  */
 
 
@@ -38,16 +37,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private DatabaseHelper db; // Object of DataBaseHelper class
 
 
-    TextView tv_totalMoney;
-    EditText et_inputMoney;
-    EditText et_description;
-    Button add_btn;
-    Button sub_btn;
-    ImageButton history_btn;
-    TextView tv_result;
-    Spinner spinner;
-    ImageButton addToSpinner_btn;
-    ImageButton removeFromSpinner_btn;
+    private TextView tv_totalMoney;
+    private EditText et_inputMoney;
+    private EditText et_description;
+    private Button add_btn;
+    private Button sub_btn;
+    private ImageButton history_btn;
+    private TextView tv_result;
+    private Spinner spinner;
+    private ImageButton addToSpinner_btn;
+    private ImageButton removeFromSpinner_btn;
 
 
 

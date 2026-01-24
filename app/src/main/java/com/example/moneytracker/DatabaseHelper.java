@@ -12,27 +12,27 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // History table
-    public static final String MONEY_HISTORY_TABLE = "MoneyHistory_table";
-    public static final String HISTORY_ID = "id";
-    public static final String OPERATION = "operation";
-    public static final String AMOUNT = "amount";
-    public static final String DESCRIPTION = "description";
-    public static final String DATE = "date";
+    private final String MONEY_HISTORY_TABLE = "MoneyHistory_table";
+    private final String HISTORY_ID = "id";
+    private final String OPERATION = "operation";
+    private final String AMOUNT = "amount";
+    private final String DESCRIPTION = "description";
+    private final String DATE = "date";
 
     // New user table
-    public static final String NEW_USER_TABLE = "NewUser_table";
-    public static final String FIRST_TIME = "firstTime";
-    public static final String FIRST_TIME_ID = "firstTimeID";
+    private final String NEW_USER_TABLE = "NewUser_table";
+    private final String FIRST_TIME = "firstTime";
+    private final String FIRST_TIME_ID = "firstTimeID";
 
     // Total amount table
-    public static final String TOTAL_MONEY_TABLE = "totalMoneyAmount_table";
-    public static final String TOTAL_AMOUNT = "totalAmount";
-    public static final String TOTAL_ID = "totalID";
+    private final String TOTAL_MONEY_TABLE = "totalMoneyAmount_table";
+    private final String TOTAL_AMOUNT = "totalAmount";
+    private final String TOTAL_ID = "totalID";
 
     // Spinner Items table
-    public static final String SPINNER_ITEMS_TABLE = "spinnerItems_table";
-    public static final String ITEM_ID = "itemID";
-    public static final String ITEM_NAME = "itemName";
+    private final String SPINNER_ITEMS_TABLE = "spinnerItems_table";
+    private final String ITEM_ID = "itemID";
+    private final String ITEM_NAME = "itemName";
 
 
     public DatabaseHelper(@Nullable Context context) {

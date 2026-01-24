@@ -22,8 +22,8 @@ public class NewUser extends AppCompatActivity {
 
     private DatabaseHelper db;
 
-    EditText et_getTotalMoney;
-    Button ok_btn;
+    private EditText et_getTotalMoney;
+    private Button ok_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
