@@ -65,7 +65,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 int adapterPosition = holder.getBindingAdapterPosition();
                 if(adapterPosition != RecyclerView.NO_POSITION){
                     // gets the id and pass it the method with the adapter position
-                    editDescAlertDialog(historyList.get(adapterPosition).getId(), adapterPosition, result -> {
+                    editDescAlertDialog(historyList.get(adapterPosition).getId(), adapterPosition, historyList.get(adapterPosition).getDescription(), result -> {
                         if(result){
                             notifyItemChanged(adapterPosition);
                         }
@@ -109,7 +109,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // Updating description from the database
-    private void editDescAlertDialog(int id, int adapterPosition, Consumer<Boolean> callback) {
+    private void editDescAlertDialog(int id, int adapterPosition, String oldDesc, Consumer<Boolean> callback) {
         DatabaseHelper db = new DatabaseHelper(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Edit Description");
@@ -122,6 +122,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         input.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(35)
         });
+        input.setText(oldDesc);
 
         builder.setView(input);
 
@@ -129,7 +130,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             String inputText = input.getText().toString().trim();
 
             if (inputText.isEmpty()) {
-                Toast.makeText(context, "Nothing added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Nothing changed", Toast.LENGTH_SHORT).show();
                 callback.accept(false);
             } else {
                 if (db.updateHistoryDesc(id, inputText)) { // if updated

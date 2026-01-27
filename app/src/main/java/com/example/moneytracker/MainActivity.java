@@ -1,5 +1,6 @@
 package com.example.moneytracker;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Spinner spinner;
     private ImageButton addToSpinner_btn;
     private ImageButton removeFromSpinner_btn;
+    private ImageButton showAmountEye_btn;
 
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         spinner = findViewById(R.id.spinner);
         addToSpinner_btn = findViewById(R.id.addToSpinner_btn);
         removeFromSpinner_btn = findViewById(R.id.removeFromSpinner_btn);
+        showAmountEye_btn = findViewById(R.id.showAmountEye_btn);
 
 
         // Listens for when a spinner item is selected
@@ -111,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String totalMoney = db.getTotalAmount(); // Gets the total amount in the database
         totalMoney = (totalMoney == null) ? "0" : totalMoney; // Makes sure that no null value is assigned
 
-        tv_totalMoney.setText(totalMoney + " IQD"); // Sets the totalMoney TextView to the value from the database
+        tv_totalMoney.setText("****"); // showing this to hide the amount
         handleMoney.setTotalMoney(totalMoney); // Sets the totalMoneyStr variable in the
         // MoneyHandling class to the value of the total money
 
@@ -135,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             } else {
                                 insertToHistory("Added", getAmountOfMoney(), getDescriptionText(), getDateAndTime());  // calls the method that inserts a new row in the database
                                 db.updateTotalAmount(newTextViewText);  // Updates the totalAmount in the database
-                                tv_totalMoney.setText(db.getTotalAmount() + " IQD"); // Updates the total money TextView by getting the total amount from the database
                                 tv_result.setVisibility(View.VISIBLE);
                                 tv_result.setTextColor(Color.rgb(60, 179, 52)); // Green
                                 tv_result.setText("Added " + getAmountOfMoney() + " IQD");
@@ -172,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             } else {
                                 insertToHistory("Removed", getAmountOfMoney(), getDescriptionText(), getDateAndTime());
                                 db.updateTotalAmount(newTextViewText);
-                                tv_totalMoney.setText(db.getTotalAmount() + " IQD");
                                 tv_result.setVisibility(View.VISIBLE);
                                 tv_result.setTextColor(Color.RED);
                                 tv_result.setText("Removed " + getAmountOfMoney() + " IQD");
@@ -227,6 +230,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 });
             }
         });
+
+        showAmountEye_btn.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                String totalMoney = db.getTotalAmount();
+                totalMoney = (totalMoney == null) ? "0" : totalMoney;
+
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    tv_totalMoney.setText(totalMoney + " IQD");
+                    return true;
+                }else if (event.getAction() == MotionEvent.ACTION_UP  || event.getAction() == MotionEvent.ACTION_CANCEL){
+                    tv_totalMoney.setText("****");
+                    return true;
+                }
+                return false;
+            }
+        });
+
         db.close();
     }
 
