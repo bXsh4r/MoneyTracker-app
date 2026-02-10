@@ -1,11 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    
     <style name="Base.Theme.MoneyTracker" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
 
         <item name="android:textColorPrimary">@color/black</item>
         <item name="alertDialogTheme">@style/alertDialogTheme</item>
+
+        <!-- disabling multi-touch -->
+        <item name="android:splitMotionEvents">false</item>
+        <item name="android:windowEnableSplitTouch">false</item>
     </style>
+
     <style name="Theme.MoneyTracker" parent="Base.Theme.MoneyTracker" />
 </resources>

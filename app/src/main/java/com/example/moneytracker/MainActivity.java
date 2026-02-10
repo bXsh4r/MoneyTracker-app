@@ -19,7 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -66,16 +65,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (db.isUserNew()) { // Checks if the user is new
             Intent NewActivityIntent = new Intent(MainActivity.this, NewUser.class);
             startActivity(NewActivityIntent);
+            finish(); // deletes the activity from the back button stack after it ends
         }
 
-        // Prevents the back button from going back to the previous intent
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, callback);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

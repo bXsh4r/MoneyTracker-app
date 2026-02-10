@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -35,14 +34,6 @@ public class NewUser extends AppCompatActivity {
         // Locks the screen on portrait mode
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // Prevents the back button from going back to the previous intent
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-
-            }
-        };
-        getOnBackPressedDispatcher().addCallback(this, callback);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_first_time);
@@ -81,7 +72,7 @@ public class NewUser extends AppCompatActivity {
                             // Intent to the MainActivity
                             Intent intent = new Intent(NewUser.this, MainActivity.class);
                             startActivity(intent);
-
+                            finish(); // deletes the activity from the back button stack after it ends
                         }
                     });
                 }
