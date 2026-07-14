@@ -181,6 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
+        historyList.sort(HistoryData.dateComparator); // sort the list according to date from latest to oldest
         return historyList;
     }
 
@@ -191,12 +192,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Updates the description of a history row
-    public boolean updateHistoryDesc(int id, String newDesc){
+    // Updates the description and date of a history row
+    public boolean updateHistory(int id, String newDesc, String newDate){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(DESCRIPTION, newDesc);
+        cv.put(DATE, newDate);
         int rowsUpdated = db.update(MONEY_HISTORY_TABLE, cv, HISTORY_ID + "=?", new String[]{String.valueOf(id)});
 
         db.close();

@@ -12,8 +12,8 @@ public class MoneyHandling {
 
         totalMoney+=value;
 
-        // If the calculated value is greater than 999,999,999 then it returns "999,999,999" with "true" to indicate that it's too big
-        if(totalMoney > 999999999){
+        // If the calculated value is greater than 999,999,999 or the user enters 0 then it returns "999,999,999" with "true" to indicate that it's too big
+        if(totalMoney > 999999999 || value == 0){
             totalMoney = Integer.parseInt(totalMoneyStr); // Reassigns back to the total value
             totalMoneyStr = totalMoney + "";
             return totalMoneyStr + " true";
@@ -30,8 +30,8 @@ public class MoneyHandling {
 
         totalMoney -= value;
 
-        // If the calculated value is less than 0 then it returns 0 with "true" to indicate that it's a negative
-        if(totalMoney < 0){
+        // If the calculated value is less than 0 or the user enters 0 then it returns 0 with "true" to indicate that it's a negative
+        if(totalMoney < 0 || value == 0){
             totalMoney = Integer.parseInt(totalMoneyStr); // Reassigns back to the total value
             totalMoneyStr = totalMoney + "";
             return totalMoneyStr + " true";

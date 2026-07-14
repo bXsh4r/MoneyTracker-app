@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,7 +133,7 @@ public class HistoryActivity extends AppCompatActivity {
                     amountAdded += Integer.parseInt(item.getAmount().replace(" IQD", ""));
                 }
             }
-            else if((item.getDate().substring(0, 10) + " " + item.getDescription().toLowerCase()).contains(text.toLowerCase())){ // if the searched item is date + description
+            else if((item.getDate() + " " + item.getDescription().toLowerCase()).contains(text.toLowerCase())){ // if the searched item is date + description
                 filteredList.add(item);
 
                 if(item.getOperation().equals("Removed")) {
@@ -157,8 +155,8 @@ public class HistoryActivity extends AppCompatActivity {
         // only make the TextView visible when user submits text (check onQueryTextSubmit method)
         tv_calculatedAmountRemoved.setVisibility(visibility);
         tv_calculatedAmountAdded.setVisibility(visibility);
-        tv_calculatedAmountRemoved.setText("Spent: " + amountRemoved + " IQD");
-        tv_calculatedAmountAdded.setText("Received: " + amountAdded + " IQD");
+        tv_calculatedAmountRemoved.setText("Spent: " + MainActivity.formatAmount(amountRemoved + " IQD"));
+        tv_calculatedAmountAdded.setText("Received: " + MainActivity.formatAmount(amountAdded + " IQD"));
     }
 
     // to show users how to search properly

@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,8 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 /* TODO:
@@ -90,6 +96,32 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         removeFromSpinner_btn = findViewById(R.id.removeFromSpinner_btn);
         showAmountEye_btn = findViewById(R.id.showAmountEye_btn);
 
+        et_inputMoney.addTextChangedListener(new TextWatcher() {
+            boolean isUpdating = false;  // A flag that checks if the input is being updated (formatted)
+            String formattedAmount;
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() >= 4 && !isUpdating) {  // if the length of input reaches 4 digits or greater, then a comma is inserted and if isUpdating is false (to prevent a stack overflow)
+                    isUpdating = true;                 // set to true so if statement doesn't get executed again causing infinite calls
+                    formattedAmount = formatAmount(s.toString().replace(",", ""));  // format the amount
+                    s.replace(0, s.length(), formattedAmount);
+                }else {
+                    isUpdating = false;                // The reason isUpdating is used is assuming the user input length is 4. the is statement becomes true and is executed. a comma is added. and the length becomes 5
+                                                       // if the isUpdating flag is not used then the if-statement will be executed again. and again. and again until a stack overflow.
+                                                       // so the isUpdating flag is used to prevent this by becoming true after the first comma. so the second call to this function will directly go to the else-statement and isUpdating becomes false again.
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+        });
 
         // Listens for when a spinner item is selected
         spinner.setOnItemSelectedListener(this);
@@ -120,21 +152,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     Toast.makeText(MainActivity.this, "Empty field(s)", Toast.LENGTH_SHORT).show();
                 } else {
                     // If "yes" is pressed in the alertDialog the code inside the if statement will be executed
-                    confirmationAlertDialog("Are you sure you want to add " + getAmountOfMoney() + " IQD to your total amount?", result -> {
+                    confirmationAlertDialog("Are you sure you want to add " + formatAmount(getAmountOfMoney()) + " IQD to your total amount?", result -> {
 
                         if (result) {
                             String newTextViewText = handleMoney.addMoney(getAmountOfMoney()); // Assigns the object to a String variable for convenience
 
                             if (newTextViewText.contains("true")) { // Checks if the returned value has "true" indicating a big number, if yes then it displays a warning
-                                warningAlertDialog("That's too much money! Nothing was added to your history");
+                                warningAlertDialog("Can't add this amount");
                                 et_inputMoney.setText("");
                                 spinner.setSelection(0); // Goes back to the first item
                             } else {
-                                insertToHistory("Added", getAmountOfMoney(), getDescriptionText(), getDateAndTime());  // calls the method that inserts a new row in the database
+                                insertToHistory("Added", getAmountOfMoney(), getDescriptionText(), getDate());  // calls the method that inserts a new row in the database
                                 db.updateTotalAmount(newTextViewText);  // Updates the totalAmount in the database
                                 tv_result.setVisibility(View.VISIBLE);
                                 tv_result.setTextColor(Color.rgb(60, 179, 52)); // Green
-                                tv_result.setText("Added " + getAmountOfMoney() + " IQD");
+                                tv_result.setText("Added " + formatAmount(getAmountOfMoney()) + " IQD");
                                 et_inputMoney.setText(""); // Sets the EditViews to "" so what the user typed gets removed
                                 et_description.setText("");
                                 spinner.setSelection(0); // Goes back to the first item
@@ -157,20 +189,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (getAmountOfMoney().isEmpty() || getDescriptionText().isEmpty()) {  // Checks if inputs are empty
                     Toast.makeText(MainActivity.this, "Empty field(s)", Toast.LENGTH_SHORT).show();
                 } else {
-                    confirmationAlertDialog("Are you sure you want to subtract " + getAmountOfMoney() + " IQD from your total amount?", result -> {
+                    confirmationAlertDialog("Are you sure you want to subtract " + formatAmount(getAmountOfMoney()) + " IQD from your total amount?", result -> {
                         if (result) {
                             String newTextViewText = handleMoney.subMoney(getAmountOfMoney()); // Assigns the object to a String variable for convenience
 
                             if (newTextViewText.contains("true")) { // Checks if the returned value has "true" indicating a negative number, if yes it displays a warning
-                                warningAlertDialog("Can't have negative money! Nothing was added to your history");
+                                warningAlertDialog("Can't remove this amount");
                                 et_inputMoney.setText("");
                                 spinner.setSelection(0); // Goes back to the first item
                             } else {
-                                insertToHistory("Removed", getAmountOfMoney(), getDescriptionText(), getDateAndTime());
+                                insertToHistory("Removed", getAmountOfMoney(), getDescriptionText(), getDate());
                                 db.updateTotalAmount(newTextViewText);
                                 tv_result.setVisibility(View.VISIBLE);
                                 tv_result.setTextColor(Color.RED);
-                                tv_result.setText("Removed " + getAmountOfMoney() + " IQD");
+                                tv_result.setText("Removed " + formatAmount(getAmountOfMoney()) + " IQD");
                                 et_inputMoney.setText(""); // Sets the EditViews to "" so what the users typed gets removed
                                 et_description.setText("");
                                 spinner.setSelection(0); // Goes back to the first item
@@ -231,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 totalMoney = (totalMoney == null) ? "0" : totalMoney;
 
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    tv_totalMoney.setText(totalMoney + " IQD");
+                    tv_totalMoney.setText(formatAmount(totalMoney) + " IQD");
                     return true;
                 }else if (event.getAction() == MotionEvent.ACTION_UP  || event.getAction() == MotionEvent.ACTION_CANCEL){
                     tv_totalMoney.setText("****");
@@ -247,9 +279,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Gets the input typed in the money EditView
     private String getAmountOfMoney() {
         String input = et_inputMoney.getText().toString();
+        input = input.replace(",", "");
 
         if(!input.isEmpty()) {
-            return input;
+            return String.valueOf(Integer.parseInt(input)); // format the user input into a normal looking integer. For example if the user enters "01" it will become "1:
         }else{
             return "";
         }
@@ -265,12 +298,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return "";
         }
     }
-    // To get date and time
-    private String getDateAndTime() {
-        LocalDateTime dateTime = LocalDateTime.now();
+    // To get date
+    private String getDate() {
+        LocalDate date = LocalDate.now();
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("hh:mm a");
-        return dateTime.format(formatterDate) + " at " + dateTime.format(formatterTime);
+        return date.format(formatterDate);
     }
 
     // Creates an AlertDialog for input confirmation
@@ -363,9 +395,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private void insertToHistory(String operation, String amount, String description, String date){
         boolean isSuccess = db.insertToDataBase(operation, amount, description, date);
 
-        if(isSuccess){
-            Toast.makeText(this, "Added to history", Toast.LENGTH_SHORT).show();
-        }else{
+        if(!isSuccess){
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
         }
         db.close();
@@ -390,5 +420,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    // a function for formatting money amount by adding commas to make it easier to look at
+    public static String formatAmount(String amount){
+        boolean hasIQD = false;  // This boolean is to determine if the argument contained the substring " IQD" or not
+
+        if(amount.contains(" IQD")){ // If yes then we remove it otherwise it will break the function
+            amount = amount.replace(" IQD", "");
+            hasIQD = true; // this is so we can later add it back to the string
+        }
+
+        List<String> formattedAmount = new ArrayList<>(Arrays.asList(amount.split(""))); // change the string to an arraylist so we can operate on it
+
+        int index=3; // index 3 is the index where we want the first comma (reading the string from right to left)
+
+        /*Let's assume the amount we want to format is "1523443"
+        * we read from right to left so we start the loop from the amount's size which is 7 here
+        * we need the indexing from right to left as 0,1,2,3... so we subtract the size from i
+        * 7 - 7 = 0
+        * 7 - 6 = 1
+        * 7 - 5 = 2
+        * 7 - 4 = 3 we got 3 which is equal to the index 3
+        * we add the comma at i=1 and add the index by 4 so it becomes 7
+        * 8 - 3 = 5 (here 7 becomes 8 because we added a comma to the ArrayList so now its size is 8)
+        * 8 - 2 = 6
+        * 8 - 1 = 7 which is equal to index
+        * we add the comma at i=1*/
+
+        for(int i = formattedAmount.size(); i>0; i--){
+            if(formattedAmount.size()-i==index){ //
+                formattedAmount.add(i, ",");
+                index+=4;
+            }
+        }
+        if (hasIQD){
+            return String.join("", formattedAmount) + " IQD";
+        }else {
+            return String.join("", formattedAmount);
+        }
     }
 }

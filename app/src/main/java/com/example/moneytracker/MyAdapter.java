@@ -2,8 +2,6 @@ package com.example.moneytracker;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyAdapter.ViewHolder holder, int position) {
-        holder.tv_opAndAmount.setText(historyList.get(position).getOperation() + ": " + historyList.get(position).getAmount());
+        holder.tv_opAndAmount.setText(historyList.get(position).getOperation() + ": " + MainActivity.formatAmount(historyList.get(position).getAmount()));
         holder.tv_description.setText(historyList.get(position).getDescription());
         holder.tv_date.setText(historyList.get(position).getDate());
         holder.layout_history.setOnClickListener(new View.OnClickListener() {
@@ -59,15 +57,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
         });
 
-        holder.editHistoryDesc_btn.setOnClickListener(new View.OnClickListener() {
+        holder.editHistory_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int adapterPosition = holder.getBindingAdapterPosition();
                 if(adapterPosition != RecyclerView.NO_POSITION){
                     // gets the id and pass it the method with the adapter position
-                    editDescAlertDialog(historyList.get(adapterPosition).getId(), adapterPosition, historyList.get(adapterPosition).getDescription(), result -> {
+                    editAlertDialog(historyList.get(adapterPosition).getId(), adapterPosition, historyList.get(adapterPosition).getDescription(), historyList.get(adapterPosition).getDate(), result -> {
                         if(result){
-                            notifyItemChanged(adapterPosition);
+                            historyList.sort(HistoryData.dateComparator); // sort the list
+                            notifyDataSetChanged(); // notify that the items have changed (position and contents)
                         }
                     });
                 }
@@ -86,7 +85,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         TextView tv_description;
         TextView tv_date;
         ConstraintLayout layout_history;
-        ImageButton editHistoryDesc_btn;
+        ImageButton editHistory_btn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,7 +93,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             tv_description = itemView.findViewById(R.id.tv_description);
             tv_date = itemView.findViewById(R.id.tv_date);
             layout_history = itemView.findViewById(R.id.layout_history);
-            editHistoryDesc_btn = itemView.findViewById(R.id.editHistoryDesc_btn);
+            editHistory_btn = itemView.findViewById(R.id.editHistory_btn);
         }
     }
 
@@ -108,41 +107,45 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 .show();
     }
 
-    // Updating description from the database
-    private void editDescAlertDialog(int id, int adapterPosition, String oldDesc, Consumer<Boolean> callback) {
+    // Updating description and date in the recycler view list
+    private void editAlertDialog(int id, int adapterPosition, String oldDesc, String oldDate, Consumer<Boolean> callback) {
         DatabaseHelper db = new DatabaseHelper(context);
+        EditDate editDate = new EditDate();
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Edit Description");
-        builder.setMessage("Enter new description:");
 
-        EditText input = new EditText(context);
-        input.setHint("Description...");
-        input.setTextColor(Color.WHITE);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setFilters(new InputFilter[] {
-                new InputFilter.LengthFilter(35)
-        });
-        input.setText(oldDesc);
+        LayoutInflater inflater = LayoutInflater.from(context); // A LayoutInflater is used here to take the XML file for the alertDialog I made. to get its View so I can use it programmatically
+        View dialogView = inflater.inflate(R.layout.two_input_dialog_box, null);
 
-        builder.setView(input);
+        builder.setTitle("Edit");
+
+        EditText newDesc = dialogView.findViewById(R.id.input_one);
+        EditText newDate = dialogView.findViewById(R.id.input_two);
+
+        editDate.watchText(newDate);
+
+        newDesc.setHint(oldDesc);
+        newDesc.setTextColor(Color.WHITE);
+
+        newDate.setHint(oldDate);
+        newDate.setTextColor(Color.WHITE);
+
+        builder.setView(dialogView);
 
         builder.setPositiveButton("OK", (dialog, which) -> {
-            String inputText = input.getText().toString().trim();
+            String newDescString = newDesc.getText().toString().trim();
+            String newDateString = newDate.getText().toString().trim();
 
-            if (inputText.isEmpty()) {
-                Toast.makeText(context, "Nothing changed", Toast.LENGTH_SHORT).show();
-                callback.accept(false);
-            } else {
-                if (db.updateHistoryDesc(id, inputText)) { // if updated
-                    Toast.makeText(context, "Updated successfully", Toast.LENGTH_SHORT).show();
-                    historyList.get(adapterPosition).setDescription(inputText); // update the list as well
+            newDescString = newDescString.isEmpty() ? oldDesc : newDescString;
+            newDateString = newDateString.isEmpty() || (newDateString.length() < 10) ? oldDate : newDateString;
+
+                if (db.updateHistory(id, newDescString, newDateString)) { // if updated
+                    historyList.get(adapterPosition).setDescription(newDescString); // update the RecyclerView as well
+                    historyList.get(adapterPosition).setDate(newDateString);
                     callback.accept(true);
                 } else {
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
                     callback.accept(false);
                 }
-
-            }
         });
 
         builder.setNegativeButton("Cancel", (dialog, which) -> {
@@ -150,6 +153,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             callback.accept(false);
         });
 
+        db.close();
         builder.show();
+
     }
 }
