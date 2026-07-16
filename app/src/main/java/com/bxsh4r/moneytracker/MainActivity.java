@@ -1,4 +1,4 @@
-package com.example.moneytracker;
+package com.bxsh4r.moneytracker;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;

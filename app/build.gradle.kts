@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.moneytracker"
+    namespace = "com.bxsh4r.moneytracker"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.moneytracker"
+        applicationId = "com.bxsh4r.moneytracker"
         minSdk = 28
         targetSdk = 36
         versionCode = 1

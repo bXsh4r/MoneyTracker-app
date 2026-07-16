@@ -1,4 +1,4 @@
-package com.example.moneytracker;
+package com.bxsh4r.moneytracker;
 
 import android.text.Editable;
 import android.text.TextWatcher;

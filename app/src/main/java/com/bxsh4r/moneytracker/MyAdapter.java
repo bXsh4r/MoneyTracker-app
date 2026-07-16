@@ -1,4 +1,4 @@
-package com.example.moneytracker;
+package com.bxsh4r.moneytracker;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -1,4 +1,4 @@
-package com.example.moneytracker;
+package com.bxsh4r.moneytracker;
 
 public class MoneyHandling {
 

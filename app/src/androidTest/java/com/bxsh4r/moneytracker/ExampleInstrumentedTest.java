@@ -1,4 +1,4 @@
-package com.example.moneytracker;
+package com.bxsh4r.moneytracker;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.moneytracker", appContext.getPackageName());
+        assertEquals("com.bxsh4r.moneytracker", appContext.getPackageName());
     }
 }
